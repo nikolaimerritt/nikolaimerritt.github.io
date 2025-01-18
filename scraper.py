@@ -2,9 +2,10 @@ from requests import get
 from pathlib import Path
 from bs4 import BeautifulSoup, Tag
 from dataclasses import dataclass
-from table2ascii import table2ascii as t2a, PresetStyle
+from table2ascii import table2ascii as t2a
 
 PAGE_URL="https://eldenring.wiki.fextralife.com/Bosses"
+PAGE_CACHE_DIR=Path("tmp")
 
 @dataclass
 class Boss:
@@ -24,9 +25,9 @@ class Boss:
 
 
 def _get_html() -> BeautifulSoup:
-    _html_cache = Path("boss-list.html")
+    PAGE_CACHE_DIR.mkdir(exist_ok=True)
+    _html_cache = Path(PAGE_CACHE_DIR, "boss-list.html")
     if not _html_cache.exists():
-        print("foo")
         _html_cache.write_bytes(get(PAGE_URL).content)
     html = _html_cache.read_text()
     return BeautifulSoup(html, "html.parser")
@@ -59,7 +60,8 @@ def _format_as_table(bosses: list[Boss]) -> str:
 boss_container = _get_html()
 
 bosses = _sort_by_location(_parse_bosses(boss_container))
-divisions = len(_format_as_table(bosses)) // 1900
+# divisions = len(_format_as_table(bosses)) // 1900
+divisions = 3
 count = len(bosses) // divisions
 for division in range(0, divisions):
     start = division * count
