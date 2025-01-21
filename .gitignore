@@ -8,6 +8,9 @@ pnpm-debug.log*
 lerna-debug.log*
 .vscode
 tmp/
+/index.html
+/favicon.ico
+/assets/
 
 node_modules
 .DS_Store
