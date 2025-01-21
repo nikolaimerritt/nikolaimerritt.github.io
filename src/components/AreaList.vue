@@ -1,20 +1,28 @@
 <template>
-  <div>
+  <div class="area-list">
     <div v-for="(area, areaIndex) in areas" :key="areaIndex">
-      <span> {{ area.location }} </span>
-      <div v-for="(boss, bossIndex) in area.bosses" :key="bossIndex">
-        <span> {{ boss.name }} </span>
-      </div>
+      <AreaCard :area="area" @boss-defeated="$emit('boss-defeated', $event)" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { type Area } from '@/areas'
+import AreaCard from './AreaCard.vue'
 
 export default {
   props: {
     areas: Array<Area>,
   },
+  components: {
+    AreaCard,
+  },
 }
 </script>
+
+<style>
+.area-list {
+  display: flex;
+  flex-direction: row;
+}
+</style>

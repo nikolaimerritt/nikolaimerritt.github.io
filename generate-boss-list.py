@@ -10,6 +10,7 @@ PAGE_CACHE_DIR = Path("tmp")
 JAVASCRIPT_OUT_FILE = Path("src", "areas.ts")
 TYPESCRIPT_TEMPLATE = """
 export interface Boss {
+    id: number;
     name: string;
     defeated: boolean;
 }
@@ -44,15 +45,17 @@ class Boss:
 
 @dataclass
 class Area:
+    _HASH_CEIL = 10_000_000
+
     location: str
     bosses: list[str]
 
-    @staticmethod
-    def _boss_to_js(boss: str) -> str:
-        return f'{{ "name": "{boss}", "defeated": false }}'
+    def _boss_to_js(self, boss: str) -> str:
+        boss_id = hash(self.location + "|" + boss) % Area._HASH_CEIL
+        return f'{{ "id": {boss_id}, "name": "{boss}", "defeated": false }}'
 
     def to_js(self) -> str:
-        bosses_js = "[" + ", ".join([Area._boss_to_js(boss) for boss in self.bosses]) + "]"
+        bosses_js = "[" + ", ".join([self._boss_to_js(boss) for boss in self.bosses]) + "]"
         return f'{{ "location": "{self.location}", "bosses": {bosses_js} }}'
 
 
@@ -102,7 +105,6 @@ def _to_areas(bosses: list[Boss]) -> list[Area]:
         areas.append(Area(location=location, bosses=[boss.name for boss in area_bosses]))
     areas.sort(key=lambda area: area.location)
     return areas
-
 
 def _format_as_table(bosses: list[Boss]) -> str:
     output = t2a(

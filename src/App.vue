@@ -1,13 +1,13 @@
 <template>
   <main>
     <LoginScreen @setToken="loadAreas($event)" v-show="areas.length === 0" />
-    <BossList v-show="areas.length > 0" :areas="areas" />
+    <AreaList v-show="areas.length > 0" :areas="areas" @boss-defeated="onBossDefeated($event)" />
   </main>
 </template>
 
 <script lang="ts">
-import { Areas, type Area } from './areas'
-import BossList from './components/AreaList.vue'
+import { Areas, type Area, type Boss } from './areas'
+import AreaList from './components/AreaList.vue'
 import LoginScreen from './components/LoginScreen.vue'
 import { KeyValueStorage } from './util/key-value-store'
 
@@ -31,10 +31,18 @@ export default {
       this.areas = await this.keyValueStorage.loadBossesDefeated(Areas)
       console.log('Loaded bosses', this.areas)
     },
+    async onBossDefeated(boss: Boss) {
+      console.log('app: boss defeated', boss)
+      const ownBoss = this.areas.flatMap((area) => area.bosses).find((b) => b.id == boss.id)
+      if (ownBoss) {
+        ownBoss.defeated = !ownBoss?.defeated
+        await this.keyValueStorage?.saveBossesDefeated(this.areas)
+      }
+    },
   },
   components: {
     LoginScreen,
-    BossList,
+    AreaList,
   },
 }
 </script>
