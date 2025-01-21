@@ -7,7 +7,20 @@ import re
 
 PAGE_URL = "https://eldenring.wiki.fextralife.com/Bosses"
 PAGE_CACHE_DIR = Path("tmp")
-JAVASCRIPT_OUT_FILE = Path("bosses.js")
+JAVASCRIPT_OUT_FILE = Path("src", "areas.ts")
+TYPESCRIPT_TEMPLATE = """
+export interface Boss {
+    name: string;
+    defeated: boolean;
+}
+
+export interface Area {
+    location: string;
+    bosses: Boss[];
+}
+
+export const Areas: Area[] = $AREAS
+"""
 
 
 @dataclass
@@ -28,6 +41,19 @@ class Boss:
 
     def to_js(self) -> str:
         return f'{{ "name": "{self.name}", "location": "{self.location}", "defeated": false }}'
+
+@dataclass
+class Area:
+    location: str
+    bosses: list[str]
+
+    @staticmethod
+    def _boss_to_js(boss: str) -> str:
+        return f'{{ "name": "{boss}", "defeated": false }}'
+
+    def to_js(self) -> str:
+        bosses_js = "[" + ", ".join([Area._boss_to_js(boss) for boss in self.bosses]) + "]"
+        return f'{{ "location": "{self.location}", "bosses": {bosses_js} }}'
 
 
 def _get_html() -> BeautifulSoup:
@@ -65,10 +91,17 @@ def _is_duplicate(boss: Boss) -> bool:
     )
 
 
-def _sort_by_location(bosses: list[Boss]) -> list[Boss]:
-    bosses = list(bosses)
-    bosses.sort(key=lambda boss: (boss.location, boss.name))
-    return bosses
+def _to_areas(bosses: list[Boss]) -> list[Area]:
+    locations = set(boss.location for boss in bosses)
+    print(f"to_areas: locations", locations)
+    areas = []
+    for location in locations:
+        area_bosses = [boss for boss in bosses if boss.location == location]
+        area_bosses.sort(key=lambda boss: boss.name)
+        print(f"to_area: location", location, area_bosses)
+        areas.append(Area(location=location, bosses=[boss.name for boss in area_bosses]))
+    areas.sort(key=lambda area: area.location)
+    return areas
 
 
 def _format_as_table(bosses: list[Boss]) -> str:
@@ -80,21 +113,14 @@ def _format_as_table(bosses: list[Boss]) -> str:
     )
     return output
 
-
-def _format_as_js(bosses: list[Boss]) -> str:
-    bosses_json = "[" + ",\n".join([boss.to_js() for boss in bosses]) + "]"
-    return f"const BOSSES = {bosses_json};"
+def _format_as_ts(areas: list[Area]) -> str:
+    areas = "[" + ",\n".join([ area.to_js() for area in areas ]) + "]"
+    return TYPESCRIPT_TEMPLATE.replace("$AREAS", areas)
 
 
 boss_container = _get_html()
-bosses = [
-    boss
-    for boss in _sort_by_location(_parse_bosses(boss_container))
-    if not _is_duplicate(boss)
-]
-for location in set(boss.location for boss in bosses):
-    print(location, len([boss for boss in bosses if boss.location == location]))
-
-print(_format_as_table(bosses))
+bosses = [boss for boss in _parse_bosses(boss_container) if not _is_duplicate(boss)]
+areas = _to_areas(bosses)
+# print(_format_as_table(bosses))
 print(len(bosses))
-JAVASCRIPT_OUT_FILE.write_text(_format_as_js(bosses))
+JAVASCRIPT_OUT_FILE.write_text(_format_as_ts(areas))

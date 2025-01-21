@@ -1,21 +1,40 @@
 <template>
   <main>
-    <LoginScreen @setToken="token = $event" v-show="token === ''" />
+    <LoginScreen @setToken="loadAreas($event)" v-show="areas.length === 0" />
+    <BossList v-show="areas.length > 0" :areas="areas" />
   </main>
 </template>
 
 <script lang="ts">
+import { Areas, type Area } from './areas'
+import BossList from './components/AreaList.vue'
 import LoginScreen from './components/LoginScreen.vue'
+import { KeyValueStorage } from './util/key-value-store'
+
+type Data = {
+  token: string
+  areas: Area[]
+  keyValueStorage: KeyValueStorage | undefined
+}
 
 export default {
-  data() {
+  data(): Data {
     return {
       token: '',
+      areas: [],
+      keyValueStorage: undefined,
     }
   },
-  methods: {},
+  methods: {
+    async loadAreas(token: string) {
+      this.keyValueStorage = new KeyValueStorage(token)
+      this.areas = await this.keyValueStorage.loadBossesDefeated(Areas)
+      console.log('Loaded bosses', this.areas)
+    },
+  },
   components: {
     LoginScreen,
+    BossList,
   },
 }
 </script>

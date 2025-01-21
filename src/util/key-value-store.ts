@@ -1,4 +1,4 @@
-import { type Boss } from '../boss'
+import type { Area } from '@/areas'
 import { BoolArraySerializer } from './bool-array-serializer'
 
 export class KeyValueStorage {
@@ -12,20 +12,24 @@ export class KeyValueStorage {
     this.apiKey = apiKey
   }
 
-  public async saveBossesDefeated(bosses: Boss[]) {
-    const defeatedArray = bosses.map((boss) => boss.defeated)
+  public async saveBossesDefeated(areas: Area[]) {
+    const defeatedArray = areas.flatMap((area) => area.bosses).map((boss) => boss.defeated)
     const defeatedBase64 = BoolArraySerializer.toBase64String(defeatedArray)
     await this.writeValue(KeyValueStorage.bossesKey, defeatedBase64)
   }
 
-  public async loadBossesDefeated(bosses: Boss[]) {
+  public async loadBossesDefeated(area: Area[]): Promise<Area[]> {
+    const areasClone = structuredClone(area)
     const defeatedBase64 = await this.getValue(KeyValueStorage.bossesKey)
     if (defeatedBase64 !== undefined && defeatedBase64 !== KeyValueStorage.noneDefeated) {
       const defeatedArray = BoolArraySerializer.fromBase64String(defeatedBase64)
+      // TO SELF: this doesnt work if flatmap does a deep copy, but I dont think flatmap does
+      const bosses = areasClone.flatMap((area) => area.bosses)
       for (let i = 0; i < bosses.length && i < defeatedArray.length; i++) {
         bosses[i].defeated = defeatedArray[i]
       }
     }
+    return areasClone
   }
 
   public async clearBossesDefeated() {
