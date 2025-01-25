@@ -1,13 +1,10 @@
 <template>
   <div class="root">
     <h3>{{ area?.location }}</h3>
+    <hr />
     <div>
       <div v-for="(boss, index) in area?.bosses" :key="index" class="boss">
-        <span
-          @click="onToggleDefeated(boss)"
-          class="boss-text"
-          :class="{ defeated: boss.defeated }"
-        >
+        <span @click="onToggleDefeated(boss)" :class="{ defeated: boss.defeated }">
           {{ boss.name }}
         </span>
       </div>
@@ -31,19 +28,32 @@ export default {
 </script>
 
 <style scoped>
+h3 {
+  font-size: 20px;
+}
+
+hr {
+  margin-bottom: 8px;
+}
+
 .root {
   width: 100%;
   height: 100%;
   background-color: rgb(0, 128, 128);
   border-radius: 6px;
-  padding: 16px 24px;
+  padding: 12px 24px;
+}
+
+.root:hover {
+  transform: scale(1.01);
+  animation-timing-function: ease;
 }
 
 .boss {
   padding: 4px 0;
 }
 
-.boss-text {
+span {
   cursor: pointer;
 }
 
