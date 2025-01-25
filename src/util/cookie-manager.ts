@@ -1,26 +1,26 @@
 export class CookieManager {
-  private static tokenCookieName = 'token'
-  private static tokenCookieExpirationDays = 365
+  private static passwordCookieName = 'password'
+  private static passwordCookieExpirationDays = 365
 
-  public static getTokenCookie(): string | undefined {
-    const token = CookieManager.getCookie(CookieManager.tokenCookieName)
+  public static getPasswordCookie(): string | undefined {
+    const password = CookieManager.getCookie(CookieManager.passwordCookieName)
     // Refreshing cookie
-    if (token !== undefined) {
-      CookieManager.setTokenCookie(token)
+    if (password !== undefined) {
+      CookieManager.setPasswordCookie(password)
     }
-    return token
+    return password
   }
 
-  public static setTokenCookie(token: string) {
+  public static setPasswordCookie(password: string) {
     CookieManager.setCookie(
-      CookieManager.tokenCookieName,
-      token,
-      CookieManager.tokenCookieExpirationDays,
+      CookieManager.passwordCookieName,
+      password,
+      CookieManager.passwordCookieExpirationDays,
     )
   }
 
-  public static deleteTokenCookie() {
-    CookieManager.deleteCookie(CookieManager.tokenCookieName)
+  public static deletePasswordCookie() {
+    CookieManager.deleteCookie(CookieManager.passwordCookieName)
   }
 
   private static setCookie(cookieKey: string, cookieValue: string, expirationDays: number) {

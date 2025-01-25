@@ -2,18 +2,18 @@
   <main>
     <nav>
       <h2>Elden Ring Boss Tracker</h2>
-      <button v-if="token.length > 0" @click="logout">Log out</button>
+      <button v-if="password.length > 0" @click="logout">Log out</button>
     </nav>
     <div class="main-container">
       <marquee scrollamount="10">ohhhhhhhhhhh sheldon ring</marquee>
-      <LoginScreen @setToken="loadAreas($event)" v-show="token.length === 0" />
-      <div class="input-container" v-show="token.length > 0">
+      <LoginScreen @setPassword="loadAreas($event)" v-show="password.length === 0" />
+      <div class="input-container" v-show="password.length > 0">
         <input type="text" v-model="searchText" placeholder="Search here" />
       </div>
-      <div class="progress-bar-container" v-show="token.length > 0">
+      <div class="progress-bar-container" v-show="password.length > 0">
         <ProgressBar class="progress-bar" :progress="bossProgress()"></ProgressBar>
       </div>
-      <div class="areas-container" v-show="token.length > 0">
+      <div class="areas-container" v-show="password.length > 0">
         <AreaList :areas="areas" @boss-defeated="onBossDefeated($event)" />
       </div>
     </div>
@@ -29,7 +29,7 @@ import { CookieManager } from './util/cookie-manager'
 import { KeyValueStorage } from './util/key-value-store'
 
 type Data = {
-  token: string
+  password: string
   originalAreas: Area[]
   areas: Area[]
   searchText: string
@@ -39,7 +39,7 @@ type Data = {
 export default {
   data(): Data {
     return {
-      token: '',
+      password: '',
       originalAreas: [],
       areas: [],
       searchText: '',
@@ -47,9 +47,9 @@ export default {
     }
   },
   methods: {
-    async loadAreas(token: string) {
-      this.token = token
-      this.keyValueStorage = new KeyValueStorage(token)
+    async loadAreas(password: string) {
+      this.password = password
+      this.keyValueStorage = new KeyValueStorage(password)
       this.originalAreas = await this.keyValueStorage.loadBossesDefeated(Areas)
       this.areas = this.originalAreas.slice()
     },
@@ -69,7 +69,7 @@ export default {
       return 0
     },
     logout() {
-      CookieManager.deleteTokenCookie()
+      CookieManager.deletePasswordCookie()
       window.location.reload()
     },
   },

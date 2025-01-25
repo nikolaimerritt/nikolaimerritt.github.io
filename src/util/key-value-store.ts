@@ -6,13 +6,13 @@ export class KeyValueStorage {
   private static bossesKey = 'bosses-defeated'
   private static noneDefeated = '~'
 
-  private token: string
+  private password: string
 
-  public constructor(token: string) {
-    this.token = token
+  public constructor(password: string) {
+    this.password = password
   }
 
-  public static async getToken(): Promise<string> {
+  public static async getPassword(): Promise<string> {
     const response = await fetch(`${KeyValueStorage.apiUrl}/GetAppKey`, {
       method: 'GET',
     })
@@ -50,7 +50,7 @@ export class KeyValueStorage {
 
   private async writeValue(key: string, value: string) {
     const response = await fetch(
-      `${KeyValueStorage.apiUrl}/UpdateValue/${this.token}/${key}/${value}`,
+      `${KeyValueStorage.apiUrl}/UpdateValue/${this.password}/${key}/${value}`,
       {
         method: 'POST',
       },
@@ -61,7 +61,7 @@ export class KeyValueStorage {
   }
 
   private async getValue(key: string) {
-    const response = await fetch(`${KeyValueStorage.apiUrl}/GetValue/${this.token}/${key}`, {
+    const response = await fetch(`${KeyValueStorage.apiUrl}/GetValue/${this.password}/${key}`, {
       method: 'GET',
     })
     if (response.ok) {
