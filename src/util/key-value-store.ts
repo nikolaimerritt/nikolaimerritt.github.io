@@ -6,10 +6,22 @@ export class KeyValueStorage {
   private static bossesKey = 'bosses-defeated'
   private static noneDefeated = '~'
 
-  private apiKey: string
+  private token: string
 
-  public constructor(apiKey: string) {
-    this.apiKey = apiKey
+  public constructor(token: string) {
+    this.token = token
+  }
+
+  public static async getToken(): Promise<string> {
+    const response = await fetch(`${KeyValueStorage.apiUrl}/GetAppKey`, {
+      method: 'GET',
+    })
+    if (response.ok) {
+      return (await response.text()).trim().replace(/\"/g, '')
+    } else {
+      console.error(response)
+      throw new Error(await response.text())
+    }
   }
 
   public async saveBossesDefeated(areas: Area[]) {
@@ -38,7 +50,7 @@ export class KeyValueStorage {
 
   private async writeValue(key: string, value: string) {
     const response = await fetch(
-      `${KeyValueStorage.apiUrl}/UpdateValue/${this.apiKey}/${key}/${value}`,
+      `${KeyValueStorage.apiUrl}/UpdateValue/${this.token}/${key}/${value}`,
       {
         method: 'POST',
       },
@@ -49,7 +61,7 @@ export class KeyValueStorage {
   }
 
   private async getValue(key: string) {
-    const response = await fetch(`${KeyValueStorage.apiUrl}/GetValue/${this.apiKey}/${key}`, {
+    const response = await fetch(`${KeyValueStorage.apiUrl}/GetValue/${this.token}/${key}`, {
       method: 'GET',
     })
     if (response.ok) {
