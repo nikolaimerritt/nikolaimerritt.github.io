@@ -27,9 +27,6 @@ export default {
       this.$emit('boss-defeated', boss)
     },
   },
-  mounted() {
-    console.log('area', this.area)
-  },
 }
 </script>
 
