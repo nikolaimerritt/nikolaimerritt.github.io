@@ -1,11 +1,15 @@
 <template>
   <main>
     <div class="main-container">
+      <marquee scrollamount="10">ohhhhhhhhhhh sheldon ring</marquee>
       <LoginScreen @setToken="loadAreas($event)" v-show="token.length === 0" />
       <div class="input-container" v-show="token.length > 0">
         <input type="text" v-model="searchText" placeholder="Search here" />
       </div>
-      <div class="areas-container">
+      <div class="progress-bar-container" v-show="token.length > 0">
+        <ProgressBar class="progress-bar" :progress="bossProgress()"></ProgressBar>
+      </div>
+      <div class="areas-container" v-show="token.length > 0">
         <AreaList :areas="areas" @boss-defeated="onBossDefeated($event)" />
       </div>
     </div>
@@ -16,6 +20,7 @@
 import { Areas, type Area, type Boss } from './areas'
 import AreaList from './components/AreaList.vue'
 import LoginScreen from './components/LoginScreen.vue'
+import ProgressBar from './components/ProgressBar.vue'
 import { KeyValueStorage } from './util/key-value-store'
 
 type Data = {
@@ -50,10 +55,19 @@ export default {
         await this.keyValueStorage?.saveBossesDefeated(this.areas)
       }
     },
+    bossProgress() {
+      const bosses = this.originalAreas.flatMap((area) => area.bosses)
+      const progress = bosses.filter((boss) => boss.defeated).length / bosses.length
+      if (isFinite(progress)) {
+        return progress
+      }
+      return 0
+    },
   },
   components: {
     LoginScreen,
     AreaList,
+    ProgressBar,
   },
   watch: {
     searchText(toSearch: string) {
@@ -79,6 +93,11 @@ export default {
 </script>
 
 <style scoped>
+marquee {
+  font-size: 20px;
+  padding-bottom: 20px;
+}
+
 header {
   line-height: 1.5;
 }
@@ -134,5 +153,19 @@ main {
 
 .main-container {
   width: 85%;
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-bar {
+  width: 90%;
+  margin-bottom: 15px;
+}
+
+.progress-bar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
 }
 </style>

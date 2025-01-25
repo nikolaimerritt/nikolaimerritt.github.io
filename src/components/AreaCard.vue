@@ -1,6 +1,7 @@
 <template>
   <div class="root">
-    <h3>{{ area?.location }}</h3>
+    <h3 :class="{ defeated: area?.bosses.every((boss) => boss.defeated) }">{{ area?.location }}</h3>
+
     <hr />
     <div>
       <div v-for="(boss, index) in area?.bosses" :key="index" class="boss">
@@ -39,7 +40,7 @@ hr {
 .root {
   width: 100%;
   height: 100%;
-  background-color: rgb(0, 128, 128);
+  background-color: #413a2b;
   border-radius: 6px;
   padding: 12px 24px;
 }
@@ -60,5 +61,6 @@ span {
 .defeated {
   text-decoration: line-through;
   font-style: italic;
+  font-weight: 100;
 }
 </style>

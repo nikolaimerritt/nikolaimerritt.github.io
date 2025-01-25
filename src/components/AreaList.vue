@@ -25,7 +25,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fit, 310px);
   column-gap: 30px;
-  row-gap: 30px;
+  row-gap: 45px;
   max-width: 100%;
 }
 </style>
