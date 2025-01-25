@@ -1,11 +1,15 @@
 <template>
   <div class="root">
     <h3>{{ area?.location }}</h3>
-    <div class="boss-list">
+    <div>
       <div v-for="(boss, index) in area?.bosses" :key="index" class="boss">
-        <button @click="onToggleDefeated(boss)">X</button>
-        <span> {{ boss.name }} </span>
-        <span v-if="boss.defeated"> (Defeated) </span>
+        <span
+          @click="onToggleDefeated(boss)"
+          class="boss-text"
+          :class="{ defeated: boss.defeated }"
+        >
+          {{ boss.name }}
+        </span>
       </div>
     </div>
   </div>
@@ -23,25 +27,31 @@ export default {
       this.$emit('boss-defeated', boss)
     },
   },
+  mounted() {
+    console.log('area', this.area)
+  },
 }
 </script>
 
 <style scoped>
 .root {
-  width: 250px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 0 10px;
-}
-.boss-list {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: teal;
+  border-radius: 6px;
+  padding: 4px;
 }
 
 .boss {
-  display: flex;
-  flex-direction: row;
-  width: 200px;
+  padding: 4px 0;
+}
+
+.boss-text {
+  cursor: pointer;
+}
+
+.defeated {
+  text-decoration: line-through;
+  font-style: italic;
 }
 </style>
