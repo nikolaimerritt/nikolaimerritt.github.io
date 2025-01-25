@@ -1,5 +1,9 @@
 <template>
   <main>
+    <nav>
+      <h2>Elden Ring Boss Tracker</h2>
+      <button v-if="token.length > 0" @click="logout">Log out</button>
+    </nav>
     <div class="main-container">
       <marquee scrollamount="10">ohhhhhhhhhhh sheldon ring</marquee>
       <LoginScreen @setToken="loadAreas($event)" v-show="token.length === 0" />
@@ -21,6 +25,7 @@ import { Areas, type Area, type Boss } from './areas'
 import AreaList from './components/AreaList.vue'
 import LoginScreen from './components/LoginScreen.vue'
 import ProgressBar from './components/ProgressBar.vue'
+import { CookieManager } from './util/cookie-manager'
 import { KeyValueStorage } from './util/key-value-store'
 
 type Data = {
@@ -63,6 +68,10 @@ export default {
       }
       return 0
     },
+    logout() {
+      CookieManager.deleteTokenCookie()
+      window.location.reload()
+    },
   },
   components: {
     LoginScreen,
@@ -93,6 +102,29 @@ export default {
 </script>
 
 <style scoped>
+nav {
+  position: fixed;
+  top: 0;
+  background-color: #0f0f0f;
+  width: 100%;
+  padding-left: 10%;
+  display: flex;
+  flex-direction: row;
+  z-index: 100;
+}
+
+nav h2 {
+  width: 100%;
+}
+
+button {
+  cursor: pointer;
+}
+
+nav button {
+  width: 100px;
+}
+
 marquee {
   font-size: 20px;
   padding-bottom: 20px;
