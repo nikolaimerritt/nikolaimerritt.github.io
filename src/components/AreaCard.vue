@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="root">
     <h3>{{ area?.location }}</h3>
     <div class="boss-list">
       <div v-for="(boss, index) in area?.bosses" :key="index" class="boss">
@@ -26,7 +26,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.root {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 10px;
+}
 .boss-list {
   display: flex;
   flex-direction: column;

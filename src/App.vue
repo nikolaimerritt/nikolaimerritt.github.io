@@ -1,7 +1,9 @@
 <template>
   <main>
-    <LoginScreen @setToken="loadAreas($event)" v-show="areas.length === 0" />
-    <AreaList v-show="areas.length > 0" :areas="areas" @boss-defeated="onBossDefeated($event)" />
+    <div class="main-container">
+      <LoginScreen @setToken="loadAreas($event)" v-show="areas.length === 0" />
+      <AreaList :areas="areas" @boss-defeated="onBossDefeated($event)" />
+    </div>
   </main>
 </template>
 
@@ -73,5 +75,15 @@ header {
     place-items: flex-start;
     flex-wrap: wrap;
   }
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.main-container {
+  width: 80%;
 }
 </style>
