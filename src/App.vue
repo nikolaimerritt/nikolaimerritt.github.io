@@ -2,7 +2,7 @@
   <main>
     <nav>
       <h2>Elden Ring Boss Tracker</h2>
-      <span>Password: {{ password }}</span>
+      <span v-if="password.length > 0">Password: &nbsp;&nbsp;{{ password }}</span>
       <button v-if="password.length > 0" @click="logout">Log out</button>
     </nav>
     <div class="main-container">
@@ -112,10 +112,15 @@ nav {
   display: flex;
   flex-direction: row;
   z-index: 100;
+  align-items: center;
 }
 
 nav h2 {
   width: 100%;
+}
+
+nav span {
+  width: 200px;
 }
 
 button {
@@ -124,11 +129,13 @@ button {
 
 nav button {
   width: 100px;
+  height: 100%;
+  margin-right: 10px;
 }
 
 marquee {
   font-size: 20px;
-  padding-bottom: 20px;
+  padding: 20px 0;
 }
 
 header {

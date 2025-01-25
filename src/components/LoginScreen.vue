@@ -80,6 +80,15 @@ export default {
   flex-direction: row;
 }
 
+button {
+  width: 180px;
+  margin-right: 12px;
+}
+
+input {
+  padding-left: 12px;
+}
+
 button:not(:disabled) {
   cursor: pointer;
 }

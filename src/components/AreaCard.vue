@@ -62,5 +62,6 @@ span {
   text-decoration: line-through;
   font-style: italic;
   font-weight: 100;
+  color: #6d6961;
 }
 </style>
