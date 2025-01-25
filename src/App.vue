@@ -2,6 +2,7 @@
   <main>
     <nav>
       <h2>Elden Ring Boss Tracker</h2>
+      <span>Password: {{ password }}</span>
       <button v-if="password.length > 0" @click="logout">Log out</button>
     </nav>
     <div class="main-container">
