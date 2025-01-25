@@ -2,8 +2,10 @@
   <main>
     <div class="main-container">
       <LoginScreen @setToken="loadAreas($event)" v-show="token.length === 0" />
-      <div class="area-stuff" v-show="token.length > 0">
+      <div class="input-container" v-show="token.length > 0">
         <input type="text" v-model="searchText" placeholder="Search here" />
+      </div>
+      <div class="areas-container">
         <AreaList :areas="areas" @boss-defeated="onBossDefeated($event)" />
       </div>
     </div>
@@ -81,6 +83,26 @@ header {
   line-height: 1.5;
 }
 
+input {
+  width: 700px;
+  height: 35px;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.areas-container {
+  display: flex;
+  justify-content: center;
+}
+
 .logo {
   display: block;
   margin: 0 auto 2rem;
@@ -111,6 +133,6 @@ main {
 }
 
 .main-container {
-  width: 80%;
+  width: 85%;
 }
 </style>

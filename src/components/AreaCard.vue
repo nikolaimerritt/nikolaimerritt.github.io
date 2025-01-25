@@ -34,9 +34,9 @@ export default {
 .root {
   width: 100%;
   height: 100%;
-  background-color: teal;
+  background-color: rgb(0, 128, 128);
   border-radius: 6px;
-  padding: 4px;
+  padding: 16px 24px;
 }
 
 .boss {

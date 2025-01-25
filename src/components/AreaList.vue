@@ -23,8 +23,9 @@ export default {
 <style>
 .area-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  column-gap: 10px;
+  grid-template-columns: repeat(auto-fit, 310px);
+  column-gap: 30px;
   row-gap: 30px;
+  max-width: 100%;
 }
 </style>
