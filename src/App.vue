@@ -21,7 +21,11 @@
         <ProgressBar class="progress-bar" :progress="bossProgress()"></ProgressBar>
       </div>
       <div class="areas-container" v-show="password.length > 0">
-        <AreaList :areas="areas" @boss-defeated="onBossDefeated($event)" />
+        <AreaList
+          :areas="areas"
+          :boss-counts="bossCounts"
+          @boss-defeated="onBossDefeated($event)"
+        />
       </div>
     </div>
   </main>
@@ -40,6 +44,7 @@ type Data = {
   password: string
   originalAreas: Area[]
   areas: Area[]
+  bossCounts: { [location: string]: number }
   searchText: string
   keyValueStorage: KeyValueStorage | undefined
   showProfileDropdown: boolean
@@ -51,6 +56,7 @@ export default {
       password: '',
       originalAreas: [],
       areas: [],
+      bossCounts: {},
       searchText: '',
       keyValueStorage: undefined,
       showProfileDropdown: false,
@@ -61,11 +67,11 @@ export default {
       this.password = password
       this.keyValueStorage = new KeyValueStorage(password)
       this.originalAreas = await this.keyValueStorage.loadBossesDefeated(Areas)
+      this.bossCounts = {} as { [location: string]: number }
+      for (const area of this.originalAreas) {
+        this.bossCounts[area.location] = area.bosses.length
+      }
       this.areas = this.originalAreas.slice()
-      const locationsOrdered = [
-        
-      ]
-      console.log(this.areas.map((area) => area.location).join('\n'))
     },
     async onBossDefeated(boss: Boss) {
       const ownBoss = this.areas.flatMap((area) => area.bosses).find((b) => b.id == boss.id)

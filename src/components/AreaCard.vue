@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <h3 :class="{ defeated: area?.bosses.every((boss) => boss.defeated) }">{{ area?.location }}</h3>
+    <h3 :class="{ defeated: area?.bosses.filter((boss) => boss.defeated).length === bossCount }">{{ area?.location }}</h3>
 
     <hr />
     <div>
@@ -19,6 +19,7 @@ import type { PropType } from 'vue'
 export default {
   props: {
     area: Object as PropType<Area>,
+    bossCount: Number,
   },
   methods: {
     onToggleDefeated(boss: Boss) {

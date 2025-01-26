@@ -328,7 +328,6 @@ export const Areas: Area[] = [
     bosses: [
       { id: 1329297, name: 'Death Rite Bird', defeated: false },
       { id: 5476060, name: 'Lamenter', defeated: false },
-      { id: 3031366, name: 'Tibia Mariner', defeated: false },
     ],
   },
   {
@@ -337,7 +336,8 @@ export const Areas: Area[] = [
       { id: 4107058, name: 'Commander Gaius', defeated: false },
       { id: 5714298, name: 'Fallingstar Beast', defeated: false },
       { id: 8852824, name: 'Scadutree Avatar', defeated: false },
-      { id: 2363673, name: 'Tree Sentinel', defeated: false },
+      { id: 2363673, name: 'Tree Sentinel (1)', defeated: false },
+      { id: 2363672, name: 'Tree Sentinel (2)', defeated: false },
     ],
   },
   {
