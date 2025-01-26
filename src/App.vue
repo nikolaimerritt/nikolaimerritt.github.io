@@ -1,17 +1,13 @@
 <template>
-  <main>
+  <main @click="showProfileDropdown = false">
     <div class="nav-container">
       <nav>
         <h2>Elden Ring Boss Tracker</h2>
-        <div
-          v-if="password.length > 0"
-          @click="showProfileDropdown = !showProfileDropdown"
-          class="profile-button"
-        >
+        <div v-if="password.length > 0" @click="openDropdown($event)" class="profile-button">
           <IconProfile />
         </div>
       </nav>
-      <div v-if="showProfileDropdown" class="profile-dropdown">
+      <div v-if="showProfileDropdown" class="profile-dropdown" @click="cancelClick($event)">
         <span> Password: {{ password }} </span>
         <button @click="logout">Log out</button>
       </div>
@@ -81,6 +77,13 @@ export default {
         return progress
       }
       return 0
+    },
+    cancelClick(event: MouseEvent) {
+      event.stopPropagation()
+    },
+    openDropdown(event: MouseEvent) {
+      this.showProfileDropdown = true
+      event.stopPropagation()
     },
     logout() {
       CookieManager.deletePasswordCookie()
