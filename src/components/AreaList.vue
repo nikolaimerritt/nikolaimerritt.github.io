@@ -28,4 +28,10 @@ export default {
   row-gap: 45px;
   max-width: 100%;
 }
+
+@media (max-width: 600px) {
+  .area-list {
+    grid-template-columns: initial;
+  }
+}
 </style>

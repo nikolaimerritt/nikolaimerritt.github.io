@@ -1,12 +1,11 @@
 <template>
   <main>
     <nav>
-      <h2>Elden Ring Boss Tracker</h2>
+      <span>Elden Ring Boss Tracker</span>
       <span v-if="password.length > 0">Password: &nbsp;&nbsp;{{ password }}</span>
       <button v-if="password.length > 0" @click="logout">Log out</button>
     </nav>
     <div class="main-container">
-      <marquee scrollamount="10">ohhhhhhhhhhh sheldon ring</marquee>
       <LoginScreen @setPassword="loadAreas($event)" v-show="password.length === 0" />
       <div class="input-container" v-show="password.length > 0">
         <input type="text" v-model="searchText" placeholder="Search here" />
@@ -114,6 +113,7 @@ nav {
   flex-direction: row;
   z-index: 100;
   align-items: center;
+  font-size: 12px;
 }
 
 nav h2 {
