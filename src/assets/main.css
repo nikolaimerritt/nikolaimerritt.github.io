@@ -20,6 +20,12 @@ a,
   }
 }
 
+p {
+  word-break: normal;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
 /* @media (min-width: 1024px) {
   body {
     display: flex;

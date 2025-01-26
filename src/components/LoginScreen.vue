@@ -18,11 +18,9 @@
           Generate a new password
         </button>
         <input disabled v-model="newPassword" />
-      </div>
-      <br />
-      <div class="row">
-        <button id="set-password" @click="setPassword()">Log in</button>
+        <br />
         <input type="text" v-model="password" placeholder="Enter your password here." />
+        <button id="set-password" @click="setPassword()">Log in</button>
       </div>
     </div>
   </div>
@@ -61,32 +59,23 @@ export default {
 }
 </script>
 <style lang="css" scoped>
-.root {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .boxy {
   display: flex;
   padding-top: 30px;
   flex-direction: column;
   justify-content: left;
-  width: 800px;
 }
 
 .row {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
 }
 
+input,
 button {
-  width: 180px;
-  margin-right: 12px;
-}
-
-input {
-  padding-left: 12px;
+  max-width: 200px;
+  margin-bottom: 12px;
 }
 
 button:not(:disabled) {
