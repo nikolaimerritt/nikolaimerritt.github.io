@@ -106,6 +106,7 @@ export default {
 nav {
   position: fixed;
   top: 0;
+  left: 0;
   background-color: #0f0f0f;
   width: 100%;
   padding-left: 10%;
@@ -120,7 +121,9 @@ nav h2 {
 }
 
 nav span {
-  width: 200px;
+  width: fit-content;
+  white-space: nowrap;
+  padding-right: 12px;
 }
 
 button {
@@ -143,7 +146,7 @@ header {
 }
 
 input {
-  width: 700px;
+  width: min(700px, 90%);
   height: 35px;
   padding: 15px;
   border-radius: 12px;
