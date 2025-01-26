@@ -1,9 +1,9 @@
 <template>
   <div class="root">
     <div class="boxy">
-      <p>So you need a password to save your boss kill list.</p>
+      <p>You need a password to save your boss kill list.</p>
       <p>
-        Stick a password in the input box if youre friend sent you one. that way youll be sharing
+        Stick a password in the input box if youre friend sent you one. That way youll be sharing
         the boss list with your friend.
       </p>
       <br />
@@ -12,6 +12,8 @@
         Press "Generate a new password". No, you can't set your own password, we set one for you!
         Log in with the password you got and share it with your friends.
       </p>
+      <br />
+      <br />
       <br />
       <div class="row">
         <button :disabled="newPassword.length > 0" @click="getPassword">

@@ -62,6 +62,10 @@ export default {
       this.keyValueStorage = new KeyValueStorage(password)
       this.originalAreas = await this.keyValueStorage.loadBossesDefeated(Areas)
       this.areas = this.originalAreas.slice()
+      const locationsOrdered = [
+        
+      ]
+      console.log(this.areas.map((area) => area.location).join('\n'))
     },
     async onBossDefeated(boss: Boss) {
       const ownBoss = this.areas.flatMap((area) => area.bosses).find((b) => b.id == boss.id)
@@ -90,6 +94,7 @@ export default {
       window.location.reload()
     },
   },
+  mounted() {},
   components: {
     LoginScreen,
     AreaList,
