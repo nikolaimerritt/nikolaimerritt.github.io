@@ -1,10 +1,21 @@
 <template>
   <main>
-    <nav>
-      <span>Elden Ring Boss Tracker</span>
-      <span v-if="password.length > 0">Password: &nbsp;&nbsp;{{ password }}</span>
-      <button v-if="password.length > 0" @click="logout">Log out</button>
-    </nav>
+    <div class="nav-container">
+      <nav>
+        <h2>Elden Ring Boss Tracker</h2>
+        <div
+          v-if="password.length > 0"
+          @click="showProfileDropdown = !showProfileDropdown"
+          class="profile-button"
+        >
+          <IconProfile />
+        </div>
+      </nav>
+      <div v-if="showProfileDropdown" class="profile-dropdown">
+        <span> Password: {{ password }} </span>
+        <button @click="logout">Log out</button>
+      </div>
+    </div>
     <div class="main-container">
       <LoginScreen @setPassword="loadAreas($event)" v-show="password.length === 0" />
       <div class="input-container" v-show="password.length > 0">
@@ -23,6 +34,7 @@
 <script lang="ts">
 import { Areas, type Area, type Boss } from './areas'
 import AreaList from './components/AreaList.vue'
+import IconProfile from './components/icons/IconProfile.vue'
 import LoginScreen from './components/LoginScreen.vue'
 import ProgressBar from './components/ProgressBar.vue'
 import { CookieManager } from './util/cookie-manager'
@@ -34,6 +46,7 @@ type Data = {
   areas: Area[]
   searchText: string
   keyValueStorage: KeyValueStorage | undefined
+  showProfileDropdown: boolean
 }
 
 export default {
@@ -44,6 +57,7 @@ export default {
       areas: [],
       searchText: '',
       keyValueStorage: undefined,
+      showProfileDropdown: false,
     }
   },
   methods: {
@@ -77,6 +91,7 @@ export default {
     LoginScreen,
     AreaList,
     ProgressBar,
+    IconProfile,
   },
   watch: {
     searchText(toSearch: string) {
@@ -102,10 +117,15 @@ export default {
 </script>
 
 <style scoped>
-nav {
+.nav-container {
   position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+nav {
   background-color: #0f0f0f;
   width: 100%;
   padding-left: 10%;
@@ -120,12 +140,6 @@ nav h2 {
   width: 100%;
 }
 
-nav span {
-  width: fit-content;
-  white-space: nowrap;
-  padding-right: 12px;
-}
-
 button {
   cursor: pointer;
 }
@@ -136,9 +150,17 @@ nav button {
   margin-right: 10px;
 }
 
-marquee {
-  font-size: 20px;
-  padding: 20px 0;
+.profile-dropdown {
+  position: absolute;
+  width: min(150px, 50%);
+  border-radius: 4px;
+  padding: 4px;
+  padding-bottom: 8px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #0f0f0f;
 }
 
 header {
@@ -195,6 +217,7 @@ main {
 }
 
 .main-container {
+  margin-top: 20px;
   width: 85%;
   display: flex;
   flex-direction: column;
@@ -210,5 +233,12 @@ main {
   flex-direction: row;
   justify-content: center;
   width: 100%;
+}
+
+.profile-button {
+  display: flex;
+  flex-direction: column;
+  margin-right: 4px;
+  cursor: pointer;
 }
 </style>
