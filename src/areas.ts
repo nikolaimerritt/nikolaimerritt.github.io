@@ -350,7 +350,8 @@ export const Areas: Area[] = [
       { id: 8014866, name: 'Ancient Dragon Senessax', defeated: false },
       { id: 6838820, name: 'Ancient Dragon-Man', defeated: false },
       { id: 5576246, name: 'Bayle the Dread', defeated: false },
-      { id: 3647838, name: 'Jagged Peak Drake x2', defeated: false },
+      { id: 3647838, name: 'Jagged Peak Drake (Jagged Peak Foothills)', defeated: false },
+      { id: 3647839, name: 'Jagged Peak Drake (Jagged Peak)', defeated: false },
     ],
   },
   {
