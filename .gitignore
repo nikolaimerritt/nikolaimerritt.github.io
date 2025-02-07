@@ -11,6 +11,8 @@ tmp/
 
 node_modules
 .DS_Store
+*.db
+__pycache__/
 dist
 dist-ssr
 coverage
