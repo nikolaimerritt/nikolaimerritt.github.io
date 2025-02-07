@@ -94,7 +94,6 @@ export const Areas: Area[] = [
     bosses: [
       { id: 7048575, name: 'Ancestor Spirit', defeated: false },
       { id: 8812353, name: 'Dragonkin Soldier', defeated: false },
-      { id: 3983986, name: 'Mohg, Lord of Blood', defeated: false },
     ],
   },
   {
@@ -110,7 +109,7 @@ export const Areas: Area[] = [
       { id: 9003020, name: 'Frenzied Duelist', defeated: false },
       { id: 798273, name: 'Mad Pumpkin Heads', defeated: false },
       { id: 5544221, name: 'Magma Wyrm', defeated: false },
-      { id: 4172550, name: "Night's Cavalry (Caelid)", defeated: false },
+      { id: 4172550, name: "Night's Cavalry", defeated: false },
       { id: 6101489, name: 'Nox Swordstress & Nox Priest', defeated: false },
       { id: 6174356, name: 'Putrid Avatar', defeated: false },
       { id: 449500, name: 'Starscourge Radahn', defeated: false },
@@ -255,6 +254,10 @@ export const Areas: Area[] = [
     ],
   },
   {
+    location: 'Mohgwyn Palace',
+    bosses: [{ id: 3983986, name: 'Mohg, Lord of Blood', defeated: false }],
+  },
+  {
     location: "Miquella's Haligtree",
     bosses: [
       { id: 6557906, name: 'Loretta, Knight of the Haligtree', defeated: false },
@@ -304,7 +307,6 @@ export const Areas: Area[] = [
       { id: 7697802, name: 'Metyr, Mother of Fingers', defeated: false },
       { id: 1706140, name: 'Rakshasa', defeated: false },
       { id: 1910402, name: 'Ralva the Great Red Bear', defeated: false },
-      { id: 7394433, name: 'Tree Sentinel', defeated: false },
     ],
   },
   {
@@ -334,8 +336,13 @@ export const Areas: Area[] = [
     location: 'Scaduview',
     bosses: [
       { id: 4107058, name: 'Commander Gaius', defeated: false },
-      { id: 5714298, name: 'Fallingstar Beast', defeated: false },
       { id: 8852824, name: 'Scadutree Avatar', defeated: false },
+    ],
+  },
+  {
+    location: 'Hinterlands',
+    bosses: [
+      { id: 5714298, name: 'Fallingstar Beast', defeated: false },
       { id: 2363673, name: 'Tree Sentinel (1)', defeated: false },
       { id: 2363672, name: 'Tree Sentinel (2)', defeated: false },
     ],
