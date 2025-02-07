@@ -35,7 +35,7 @@ def _validate_user(db: DatabaseSession, request: Request):
     if user:
         return user
     else:
-        sleep(2)
+        sleep(5)
         raise HTTPException(status_code=404, detail="Not a registered user.")
 
 

@@ -4,5 +4,6 @@ RUN apt update && apt install \
 
 COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-COPY ./main.py main.py
-ENTRYPOINT [ "python3", "main.py" ]
+RUN pip install 'fastapi[standard]'
+COPY ./src /src
+ENTRYPOINT [ "fastapi", "run", "src/main.py" ]
