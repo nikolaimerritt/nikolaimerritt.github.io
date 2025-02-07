@@ -43,6 +43,7 @@ class Boss:
     def to_js(self) -> str:
         return f'{{ "name": "{self.name}", "location": "{self.location}", "defeated": false }}'
 
+
 @dataclass
 class Area:
     _HASH_CEIL = 10_000_000
@@ -55,7 +56,9 @@ class Area:
         return f'{{ "id": {boss_id}, "name": "{boss}", "defeated": false }}'
 
     def to_js(self) -> str:
-        bosses_js = "[" + ", ".join([self._boss_to_js(boss) for boss in self.bosses]) + "]"
+        bosses_js = (
+            "[" + ", ".join([self._boss_to_js(boss) for boss in self.bosses]) + "]"
+        )
         return f'{{ "location": "{self.location}", "bosses": {bosses_js} }}'
 
 
@@ -102,9 +105,12 @@ def _to_areas(bosses: list[Boss]) -> list[Area]:
         area_bosses = [boss for boss in bosses if boss.location == location]
         area_bosses.sort(key=lambda boss: boss.name)
         print(f"to_area: location", location, area_bosses)
-        areas.append(Area(location=location, bosses=[boss.name for boss in area_bosses]))
+        areas.append(
+            Area(location=location, bosses=[boss.name for boss in area_bosses])
+        )
     areas.sort(key=lambda area: area.location)
     return areas
+
 
 def _format_as_table(bosses: list[Boss]) -> str:
     output = t2a(
@@ -115,8 +121,9 @@ def _format_as_table(bosses: list[Boss]) -> str:
     )
     return output
 
+
 def _format_as_ts(areas: list[Area]) -> str:
-    areas = "[" + ",\n".join([ area.to_js() for area in areas ]) + "]"
+    areas = "[" + ",\n".join([area.to_js() for area in areas]) + "]"
     return TYPESCRIPT_TEMPLATE.replace("$AREAS", areas)
 
 

@@ -2,6 +2,8 @@ import secrets
 from fastapi import Depends, FastAPI, HTTPException, Request
 from sqlmodel import Field, Session, SQLModel, create_engine, Relationship, select
 from pydantic import BaseModel
+
+
 def _create_user_id(bytes=7) -> str:
     return secrets.token_urlsafe(bytes)
 

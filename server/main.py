@@ -1,5 +1,6 @@
 from typing import Annotated
-from .models import User, UserSchema, Area, AreaSchema, Boss, BossSchema
+from models import User, UserSchema, Area, AreaSchema, Boss, BossSchema
+from new_user import add_areas
 from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, HTTPException, Request
 from sqlmodel import Field, Session, SQLModel, create_engine, Relationship, select
@@ -42,22 +43,42 @@ AuthorizedUser = Annotated[User, Depends(_validate_user)]
 app = FastAPI(lifespan=_lifespan)
 
 
-@app.post("/signup/")
+@app.post("/signup")
 def create_stuff(db: DatabaseSession) -> UserSchema:
     if len(db.exec(select(User)).all()) > 1000:
         raise HTTPException(status_code=400, detail=f"Too many users already. Go away!")
 
     user = User()
-    area = Area(name="Test area")
-    user.areas.append(area)
-    area.bosses.append(Boss(name="Hello world test boss", defeated=False))
+    add_areas(user)
     db.add(user)
     db.commit()
     db.refresh(user)
-    print(f"user {user.areas}")
     return user.to_schema()
 
 
 @app.get("/areas")
 def get_user(user: AuthorizedUser) -> list[AreaSchema]:
     return [area.to_schema() for area in user.areas]
+
+
+@app.post("/boss/{boss_id}/defeated/{defeated}")
+def set_boss_defeated(
+    db: DatabaseSession, user: AuthorizedUser, boss_id: int, defeated: bool
+) -> BossSchema:
+    boss = db.exec(
+        select(Boss, Area, User)
+        .join(Area, Boss.area_id == Area.id)
+        .join(User, User.id == Area.user_id)
+        .where(User.id == user.id, Boss.id == boss_id)
+    ).first()
+    print(f"Found boss {boss}")
+    if not boss:
+        raise HTTPException(
+            status_code=404, detail=f"Could not find a boss with id {boss_id}"
+        )
+    boss = boss[0]
+    boss.defeated = defeated
+    db.add(boss)
+    db.commit()
+    db.refresh(boss)
+    return boss.to_schema()
