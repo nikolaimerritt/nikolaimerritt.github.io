@@ -79,19 +79,11 @@ export default {
       this.areas = this.originalAreas.slice()
     },
     async onBossDefeated(boss: Boss) {
-      const ownBoss = this.areas.flatMap((area) => area.bosses).find((b) => b.id == boss.id)
+      const ownBoss = this.areas.flatMap((area) => area.bosses).find((b) => b.id === boss.id)
       if (ownBoss) {
         ownBoss.defeated = !ownBoss?.defeated
         await this.keyValueStorage?.saveBossesDefeated(this.areas)
       }
-    },
-    bossProgress() {
-      const bosses = this.originalAreas.flatMap((area) => area.bosses)
-      const progress = bosses.filter((boss) => boss.defeated).length / bosses.length
-      if (isFinite(progress)) {
-        return progress
-      }
-      return 0
     },
     cancelClick(event: MouseEvent) {
       event.stopPropagation()
@@ -105,7 +97,13 @@ export default {
       window.location.reload()
     },
   },
-  mounted() {},
+  mounted() {
+    window.setInterval(() => {
+      if (this.password.length > 0) {
+        this.loadAreas(this.password)
+      }
+    }, 1000)
+  },
   components: {
     LoginScreen,
     AreaList,
