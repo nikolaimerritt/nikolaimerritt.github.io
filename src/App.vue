@@ -18,7 +18,12 @@
         <input type="text" v-model="searchText" placeholder="Search here" />
       </div>
       <div class="progress-bar-container" v-show="password.length > 0">
-        <ProgressBar class="progress-bar" :progress="bossProgress()"></ProgressBar>
+        <ProgressBar
+          v-show="allBosses > 0"
+          class="progress-bar"
+          :current="defeatedBosses"
+          :max="allBosses"
+        ></ProgressBar>
       </div>
       <div class="areas-container" v-show="password.length > 0">
         <AreaList
@@ -106,6 +111,15 @@ export default {
     AreaList,
     ProgressBar,
     IconProfile,
+  },
+  computed: {
+    allBosses(): number {
+      return this.originalAreas.flatMap((area) => area.bosses).length
+    },
+    defeatedBosses(): number {
+      return this.originalAreas.flatMap((area) => area.bosses).filter((boss) => boss.defeated)
+        .length
+    },
   },
   watch: {
     searchText(toSearch: string) {
