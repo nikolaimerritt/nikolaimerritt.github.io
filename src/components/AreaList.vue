@@ -11,8 +11,8 @@
 </template>
 
 <script lang="ts">
-import { type Area } from '@/areas'
 import AreaCard from './AreaCard.vue'
+import { type Area } from '@/util/bosses-api';
 import type { PropType } from 'vue'
 
 export default {

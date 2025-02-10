@@ -37,13 +37,12 @@
 </template>
 
 <script lang="ts">
-import { Areas, type Area, type Boss } from './areas'
 import AreaList from './components/AreaList.vue'
 import IconProfile from './components/icons/IconProfile.vue'
 import LoginScreen from './components/LoginScreen.vue'
 import ProgressBar from './components/ProgressBar.vue'
 import { CookieManager } from './util/cookie-manager'
-import { BossesApi } from './util/bosses-api'
+import { BossesApi, type Area, type Boss } from './util/bosses-api'
 
 type Data = {
   password: string
@@ -81,7 +80,7 @@ export default {
     async onBossDefeated(boss: Boss) {
       const ownBoss = this.areas.flatMap((area) => area.bosses).find((b) => b.id === boss.id)
       if (ownBoss) {
-        ownBoss.defeated = boss.defeated;
+        ownBoss.defeated = !boss.defeated;
         await this.bossesApi?.saveBossDefeated(ownBoss);
       }
     },
@@ -122,7 +121,6 @@ export default {
   watch: {
     searchText(toSearch: string) {
       const toSearchLowered = toSearch.toLowerCase().trim()
-      console.log('Searching with', toSearch)
       this.areas = this.originalAreas.map(
         (area) => ({ location: area.location, bosses: area.bosses.slice() }) as Area,
       )

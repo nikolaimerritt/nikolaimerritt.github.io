@@ -53,7 +53,7 @@ def create_stuff(db: DatabaseSession) -> UserSchema:
     db.add(user)
     db.commit()
     db.refresh(user)
-    sleep(1)
+    print("signup: all good", user.to_schema())
     return user.to_schema()
 
 

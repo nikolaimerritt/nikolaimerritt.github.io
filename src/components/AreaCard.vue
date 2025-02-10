@@ -13,7 +13,7 @@
   </div>
 </template>
 <script lang="ts">
-import { type Area, type Boss } from '@/areas'
+import { type Area, type Boss } from '@/util/bosses-api';
 import type { PropType } from 'vue'
 
 export default {

@@ -17,6 +17,8 @@ dist
 dist-ssr
 coverage
 *.local
+scratchpad/
+rsync.sh
 
 /cypress/videos/
 /cypress/screenshots/

@@ -1,4 +1,13 @@
-import type { Boss, Area } from "@/areas";
+export interface Boss {
+  id: number
+  name: string
+  defeated: boolean
+}
+
+export interface Area {
+  location: string
+  bosses: Boss[]
+}
 
 export class BossesApi {
     private static apiUrl = "https://elden-ring.click/api"
@@ -15,7 +24,11 @@ export class BossesApi {
     public static async getPassword(): Promise<string> {
         const response = await fetch(`${BossesApi.apiUrl}/signup`, {
             method: "POST",
+            mode: "no-cors"
         });
+        console.log("getPassword: response", response);
+        console.log("body", response.body);
+        console.log("text", await response.text());
         if (response.ok) {
             return JSON.parse(await response.text()).id;
         } else {
@@ -27,6 +40,7 @@ export class BossesApi {
     public async saveBossDefeated(boss: Boss) {
         const response = await fetch(`${BossesApi.apiUrl}/boss/${boss.id}/defeated/${boss.defeated}`, {
             method: "POST",
+            mode: "no-cors",
             headers: this.authHeaders()
         });
         if (!response.ok) {
@@ -38,6 +52,7 @@ export class BossesApi {
     public async getAreas(): Promise<Area[]> {
         const response = await fetch(`${BossesApi.apiUrl}/areas`, {
             method: "GET",
+            mode: "no-cors",
             headers: this.authHeaders()
         });
         if (response.ok) {
