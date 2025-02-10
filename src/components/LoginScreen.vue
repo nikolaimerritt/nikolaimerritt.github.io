@@ -30,8 +30,7 @@
 
 <script lang="ts">
 import { CookieManager } from '@/util/cookie-manager'
-import { KeyValueStorage } from '@/util/key-value-store'
-
+import { BossesApi } from '@/util/bosses-api';
 export default {
   data() {
     return {
@@ -48,7 +47,7 @@ export default {
     },
     async getPassword() {
       if (this.newPassword.length === 0) {
-        this.newPassword = await KeyValueStorage.getPassword()
+        this.newPassword = await BossesApi.getPassword()
       }
     },
   },

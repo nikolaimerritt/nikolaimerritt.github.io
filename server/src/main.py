@@ -6,8 +6,8 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from sqlmodel import Field, Session, SQLModel, create_engine, Relationship, select
 from time import sleep
 
-sqlite_file_name = "sheldon-ring.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+sqlite_file_name = "/sqlite/sheldon-ring.db"
+sqlite_url = f"sqlite://{sqlite_file_name}"
 connect_args = {"check_same_thread": False}
 engine = create_engine(sqlite_url, connect_args=connect_args)
 
@@ -43,7 +43,7 @@ AuthorizedUser = Annotated[User, Depends(_validate_user)]
 app = FastAPI(lifespan=_lifespan)
 
 
-@app.post("/signup")
+@app.post("/api/signup")
 def create_stuff(db: DatabaseSession) -> UserSchema:
     if len(db.exec(select(User)).all()) > 1000:
         raise HTTPException(status_code=400, detail=f"Too many users already. Go away!")
@@ -53,15 +53,16 @@ def create_stuff(db: DatabaseSession) -> UserSchema:
     db.add(user)
     db.commit()
     db.refresh(user)
+    sleep(1)
     return user.to_schema()
 
 
-@app.get("/areas")
+@app.get("/api/areas")
 def get_user(user: AuthorizedUser) -> list[AreaSchema]:
     return [area.to_schema() for area in user.areas]
 
 
-@app.post("/boss/{boss_id}/defeated/{defeated}")
+@app.post("/api/boss/{boss_id}/defeated/{defeated}")
 def set_boss_defeated(
     db: DatabaseSession, user: AuthorizedUser, boss_id: int, defeated: bool
 ) -> BossSchema:
@@ -71,7 +72,6 @@ def set_boss_defeated(
         .join(User, User.id == Area.user_id)
         .where(User.id == user.id, Boss.id == boss_id)
     ).first()
-    print(f"Found boss {boss}")
     if not boss:
         raise HTTPException(
             status_code=404, detail=f"Could not find a boss with id {boss_id}"

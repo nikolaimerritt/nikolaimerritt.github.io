@@ -43,7 +43,7 @@ import IconProfile from './components/icons/IconProfile.vue'
 import LoginScreen from './components/LoginScreen.vue'
 import ProgressBar from './components/ProgressBar.vue'
 import { CookieManager } from './util/cookie-manager'
-import { KeyValueStorage } from './util/key-value-store'
+import { BossesApi } from './util/bosses-api'
 
 type Data = {
   password: string
@@ -51,7 +51,7 @@ type Data = {
   areas: Area[]
   bossCounts: { [location: string]: number }
   searchText: string
-  keyValueStorage: KeyValueStorage | undefined
+  bossesApi: BossesApi | undefined
   showProfileDropdown: boolean
 }
 
@@ -63,15 +63,15 @@ export default {
       areas: [],
       bossCounts: {},
       searchText: '',
-      keyValueStorage: undefined,
+      bossesApi: undefined,
       showProfileDropdown: false,
     }
   },
   methods: {
     async loadAreas(password: string) {
       this.password = password
-      this.keyValueStorage = new KeyValueStorage(password)
-      this.originalAreas = await this.keyValueStorage.loadBossesDefeated(Areas)
+      this.bossesApi = new BossesApi(password);
+      this.originalAreas = await this.bossesApi.getAreas();
       this.bossCounts = {} as { [location: string]: number }
       for (const area of this.originalAreas) {
         this.bossCounts[area.location] = area.bosses.length
@@ -81,8 +81,8 @@ export default {
     async onBossDefeated(boss: Boss) {
       const ownBoss = this.areas.flatMap((area) => area.bosses).find((b) => b.id === boss.id)
       if (ownBoss) {
-        ownBoss.defeated = !ownBoss?.defeated
-        await this.keyValueStorage?.saveBossesDefeated(this.areas)
+        ownBoss.defeated = boss.defeated;
+        await this.bossesApi?.saveBossDefeated(ownBoss);
       }
     },
     cancelClick(event: MouseEvent) {
