@@ -8,12 +8,13 @@
         </div>
       </nav>
       <div v-if="showProfileDropdown" class="profile-dropdown" @click="cancelClick($event)">
-        <span> Password: {{ password }} </span>
+        <span>Password:</span>
+        <code>{{ password }}</code>
         <button @click="logout">Log out</button>
       </div>
     </div>
     <div class="main-container">
-      <LoginScreen @setPassword="loadAreas($event)" v-show="password.length === 0" />
+      <LoginScreen @setPassword="loadAreas($event, searchText)" v-show="password.length === 0" />
       <div class="input-container" v-show="password.length > 0">
         <input type="text" v-model="searchText" placeholder="Search here" />
       </div>
@@ -67,7 +68,7 @@ export default {
     }
   },
   methods: {
-    async loadAreas(password: string) {
+    async loadAreas(password: string, searchText: string) {
       this.password = password
       this.bossesApi = new BossesApi(password)
       this.originalAreas = await this.bossesApi.getAreas()
@@ -75,7 +76,7 @@ export default {
       for (const area of this.originalAreas) {
         this.bossCounts[area.name] = area.bosses.length
       }
-      this.areas = this.originalAreas.slice()
+      this.areas = this.search(this.originalAreas, searchText)
     },
     async onBossDefeated(boss: Boss) {
       const ownBoss = this.areas.flatMap((area) => area.bosses).find((b) => b.id === boss.id)
@@ -92,16 +93,41 @@ export default {
       event.stopPropagation()
     },
     logout() {
-      CookieManager.deletePasswordCookie()
-      window.location.reload()
+      if (
+        confirm(
+          'Are you sure you want to log out? Make sure you note your password, or it will be lost.',
+        )
+      ) {
+        CookieManager.deletePasswordCookie()
+        window.location.reload()
+      }
+    },
+    search(originalAreas: Area[], searchText: string): Area[] {
+      let areas = originalAreas.map(
+        (area) => ({ name: area.name, bosses: area.bosses.slice() }) as Area,
+      )
+      if (searchText === undefined || searchText.length === 0) {
+        return areas
+      }
+      const searchPattern = new RegExp(`\\b${searchText.toLowerCase().trim()}`)
+      for (const area of areas) {
+        if (searchPattern.test(area.name.toLowerCase())) {
+          continue
+        }
+        area.bosses = area.bosses.filter((boss) => searchPattern.test(boss.name.toLowerCase()))
+      }
+      areas = areas.filter(
+        (area) => searchPattern.test(area.name.toLowerCase()) || area.bosses.length > 0,
+      )
+      return areas
     },
   },
   mounted() {
     window.setInterval(() => {
       if (this.password.length > 0) {
-        this.loadAreas(this.password)
+        this.loadAreas(this.password, this.searchText)
       }
-    }, 1000)
+    }, 10_000)
   },
   components: {
     LoginScreen,
@@ -120,21 +146,7 @@ export default {
   },
   watch: {
     searchText(toSearch: string) {
-      const toSearchLowered = toSearch.toLowerCase().trim()
-      this.areas = this.originalAreas.map(
-        (area) => ({ name: area.name, bosses: area.bosses.slice() }) as Area,
-      )
-      for (const area of this.areas) {
-        if (area.name.toLowerCase().includes(toSearchLowered)) {
-          continue
-        }
-        area.bosses = area.bosses.filter((boss) =>
-          boss.name.toLowerCase().includes(toSearchLowered),
-        )
-      }
-      this.areas = this.areas.filter(
-        (area) => area.name.toLowerCase().includes(toSearchLowered) || area.bosses.length > 0,
-      )
+      this.areas = this.search(this.originalAreas, toSearch)
     },
   },
 }

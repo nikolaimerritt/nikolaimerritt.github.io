@@ -2,6 +2,7 @@ from typing import Annotated
 from models import User, UserSchema, Area, AreaSchema, Boss, BossSchema
 from new_user import add_areas
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Depends, FastAPI, HTTPException, Request
 from sqlmodel import Field, Session, SQLModel, create_engine, Relationship, select
 from time import sleep
@@ -41,6 +42,13 @@ def _validate_user(db: DatabaseSession, request: Request):
 
 AuthorizedUser = Annotated[User, Depends(_validate_user)]
 app = FastAPI(lifespan=_lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost", "http://localhost:8000"],
+    allow_credentials=True,
+    allow_methods="*",
+    allow_headers="*"
+)
 
 
 @app.post("/api/signup")
@@ -53,7 +61,6 @@ def create_stuff(db: DatabaseSession) -> UserSchema:
     db.add(user)
     db.commit()
     db.refresh(user)
-    print("signup: all good", user.to_schema())
     return user.to_schema()
 
 
