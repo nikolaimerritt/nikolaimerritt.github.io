@@ -3,7 +3,7 @@
     <div v-for="(area, areaIndex) in areas" :key="areaIndex">
       <AreaCard
         :area="area"
-        :boss-count="bossCounts === undefined ? 0 : bossCounts[area.location]"
+        :boss-count="bossCounts === undefined ? 0 : bossCounts[area.name]"
         @boss-defeated="$emit('boss-defeated', $event)"
       />
     </div>
@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import AreaCard from './AreaCard.vue'
-import { type Area } from '@/util/bosses-api';
+import { type Area } from '@/util/bosses-api'
 import type { PropType } from 'vue'
 
 export default {

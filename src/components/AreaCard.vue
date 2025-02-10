@@ -1,6 +1,8 @@
 <template>
   <div class="root">
-    <h3 :class="{ defeated: area?.bosses.filter((boss) => boss.defeated).length === bossCount }">{{ area?.location }}</h3>
+    <h3 :class="{ defeated: area?.bosses.filter((boss) => boss.defeated).length === bossCount }">
+      {{ area?.name }}
+    </h3>
 
     <hr />
     <div>
@@ -13,7 +15,7 @@
   </div>
 </template>
 <script lang="ts">
-import { type Area, type Boss } from '@/util/bosses-api';
+import { type Area, type Boss } from '@/util/bosses-api'
 import type { PropType } from 'vue'
 
 export default {

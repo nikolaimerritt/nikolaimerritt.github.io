@@ -69,19 +69,19 @@ export default {
   methods: {
     async loadAreas(password: string) {
       this.password = password
-      this.bossesApi = new BossesApi(password);
-      this.originalAreas = await this.bossesApi.getAreas();
+      this.bossesApi = new BossesApi(password)
+      this.originalAreas = await this.bossesApi.getAreas()
       this.bossCounts = {} as { [location: string]: number }
       for (const area of this.originalAreas) {
-        this.bossCounts[area.location] = area.bosses.length
+        this.bossCounts[area.name] = area.bosses.length
       }
       this.areas = this.originalAreas.slice()
     },
     async onBossDefeated(boss: Boss) {
       const ownBoss = this.areas.flatMap((area) => area.bosses).find((b) => b.id === boss.id)
       if (ownBoss) {
-        ownBoss.defeated = !boss.defeated;
-        await this.bossesApi?.saveBossDefeated(ownBoss);
+        ownBoss.defeated = !boss.defeated
+        await this.bossesApi?.saveBossDefeated(ownBoss)
       }
     },
     cancelClick(event: MouseEvent) {
@@ -122,10 +122,10 @@ export default {
     searchText(toSearch: string) {
       const toSearchLowered = toSearch.toLowerCase().trim()
       this.areas = this.originalAreas.map(
-        (area) => ({ location: area.location, bosses: area.bosses.slice() }) as Area,
+        (area) => ({ name: area.name, bosses: area.bosses.slice() }) as Area,
       )
       for (const area of this.areas) {
-        if (area.location.toLowerCase().includes(toSearchLowered)) {
+        if (area.name.toLowerCase().includes(toSearchLowered)) {
           continue
         }
         area.bosses = area.bosses.filter((boss) =>
@@ -133,7 +133,7 @@ export default {
         )
       }
       this.areas = this.areas.filter(
-        (area) => area.location.toLowerCase().includes(toSearchLowered) || area.bosses.length > 0,
+        (area) => area.name.toLowerCase().includes(toSearchLowered) || area.bosses.length > 0,
       )
     },
   },

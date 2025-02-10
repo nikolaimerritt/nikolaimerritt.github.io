@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { CookieManager } from '@/util/cookie-manager'
-import { BossesApi } from '@/util/bosses-api';
+import { BossesApi } from '@/util/bosses-api'
 export default {
   data() {
     return {
